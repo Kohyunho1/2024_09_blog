@@ -3,8 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>main</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<h1>main</h1>
+<div class="bg-green-300 h-[5vh]">
+    logo
+</div>
+<div class="content flex bg-yellow-300 h-[95vh]">
+    <div class="left bg-red-300 h-[100%] w-[15%] p-2">
+        <ul>
+            <li>item1</li>
+            <li>item2</li>
+            <li>item3</li>
+        </ul>
+    </div>
+    <div class="right bg-blue-300 h-[100%] w-[85%] p-2">
+        <div class="flex flex-col gap-2">
+            <input class="input" type="text">
+            <textarea class="textarea textarea-bordered" placeholder="Bio"></textarea>
+        </div>
+        <div class="mt-[10px]">
+            <button class="btn btn-success">수정</button>
+            <button class="btn btn-error">삭제</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
