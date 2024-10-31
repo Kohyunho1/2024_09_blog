@@ -1,9 +1,13 @@
 package com.korea.blog.domain;
 
+import com.korea.blog.domain.note.entity.Note;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,7 +21,11 @@ public class MainController {
   }
 
   @RequestMapping("/")
-  public String main() {
+  public String main(Model model) {
+
+    List<Note> noteList = mainService.getNoteList();
+    model.addAttribute("noteList", noteList);
+
     return "main";
   }
 }

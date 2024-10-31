@@ -12,11 +12,12 @@
 </div>
 <div class="content flex bg-yellow-300 h-[95vh]">
     <div class="left bg-red-300 h-[100%] w-[15%] p-2">
-        <ul>
-            <li>item1</li>
-            <li>item2</li>
-            <li>item3</li>
-        </ul>
+       <ul>
+           <li th:each="note : ${noteList}" th:text="${note.title}"></li>
+       </ul>
+        <form action="/notes/write" method="post">
+            <input type="submit" class="btn btn-info" value="추가"/>
+        </form>
     </div>
     <div class="right bg-blue-300 h-[100%] w-[85%] p-2">
         <div class="flex flex-col gap-2">
