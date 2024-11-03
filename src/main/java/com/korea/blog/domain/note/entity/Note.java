@@ -1,5 +1,6 @@
 package com.korea.blog.domain.note.entity;
 
+import com.korea.blog.domain.notebook.entity.Notebook;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,4 +19,7 @@ public class Note {
 
   @Column(columnDefinition = "TEXT")
   private String content;
+
+  @ManyToOne
+  private Notebook parent;
 }

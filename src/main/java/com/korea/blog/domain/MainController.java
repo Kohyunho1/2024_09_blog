@@ -1,6 +1,7 @@
 package com.korea.blog.domain;
 
 import com.korea.blog.domain.note.entity.Note;
+import com.korea.blog.domain.notebook.entity.Notebook;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,21 @@ public class MainController {
     mainService.init();
   }
 
-  // 초기 화면
+  // 초기 화면 -> 첫번째 노트북의 첫번째 노트가 선택되도록 약속
   @GetMapping("/")
   public String main(Model model) {
 
+    List<Notebook> notebookList = mainService.getNoteBookList();
+    Notebook selectedNotebook = notebookList.getFirst();
+
+
     List<Note> noteList = mainService.getNoteList();
     Note selectedNote = noteList.getFirst();
+
+    model.addAttribute("notebookList", notebookList);
     model.addAttribute("noteList", noteList);
     model.addAttribute("selectedNote", selectedNote);
+    model.addAttribute("selectedNotebook", selectedNotebook);
 
     return "main";
   }

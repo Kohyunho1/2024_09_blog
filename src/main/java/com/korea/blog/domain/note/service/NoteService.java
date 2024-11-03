@@ -2,6 +2,7 @@ package com.korea.blog.domain.note.service;
 
 import com.korea.blog.domain.note.entity.Note;
 import com.korea.blog.domain.note.repository.NoteRepository;
+import com.korea.blog.domain.notebook.entity.Notebook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +18,20 @@ public class NoteService {
     return noteRepository.findAll();
   }
 
-  public void saveDefault() {
+  public Note saveDefault() {
     Note note = Note.builder()
         .title("new title")
         .content("")
         .build();
 
-    noteRepository.save(note);
+    return noteRepository.save(note);
   }
 
   public Note getOne(long noteId) {
     return noteRepository.findById(noteId).orElseThrow();
   }
 
-  public void modify(long noteId, String title, String content) {
+  public Note modify(long noteId, String title, String content) {
 
     if(title.trim().length() == 0) {
       title = "제목 없음";
@@ -40,7 +41,7 @@ public class NoteService {
     note.setTitle(title);
     note.setContent(content);
 
-    noteRepository.save(note);
+    return noteRepository.save(note);
   }
 
   public void delete(long noteId) {

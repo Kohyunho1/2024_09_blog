@@ -1,5 +1,6 @@
 package com.korea.blog.domain.note.controller;
 
+import com.korea.blog.domain.MainService;
 import com.korea.blog.domain.note.entity.Note;
 import com.korea.blog.domain.note.service.NoteService;
 import jakarta.annotation.PostConstruct;
@@ -24,11 +25,7 @@ public class NoteController {
     return "main";
   }
 
-  @PostMapping("/write")
-  public String write() {
-    noteService.saveDefault();
-    return "redirect:/";
-  }
+
 
   @PostMapping("/delete/{noteId}")
   public String delete(@PathVariable long noteId) {
@@ -38,8 +35,9 @@ public class NoteController {
 
   @PostMapping("/modify/{noteId}")
   public String modify(@PathVariable long noteId, String title, String content) {
-    noteService.modify(noteId, title, content);
-    return "redirect:/notes/%d".formatted(noteId);
+    Note note = noteService.modify(noteId, title, content);
+
+    return "redirect:/books/%d/notes/%d".formatted(note.getParent().getId(), noteId);
   }
 
   @GetMapping("/{noteId}")
