@@ -32,8 +32,18 @@ public class NotebookController {
 
   @PostMapping("/{bookId}/write")
   public String writeSubBook(@PathVariable long bookId) {
-    Notebook subNotebook = notebookService.saveSubNotebook(bookId);
+
+    notebookService.checkSubNotebook(bookId);
+
+    Notebook subNotebook = mainService.saveSubNotebook(bookId);
     return "redirect:/books/%d/notes/%d".formatted(subNotebook.getId(), subNotebook.getNoteList().getFirst().getId());
+  }
+
+  @PostMapping("/{bookId}/delete")
+  public String deleteBook(@PathVariable long bookId) {
+//    mainService.deleteNoteBook(bookId);
+    notebookService.delete(bookId);
+    return "redirect:/books/%d".formatted(notebookService.getList().getFirst().getId());
   }
 
   @PostMapping("/{bookId}/notes/write")

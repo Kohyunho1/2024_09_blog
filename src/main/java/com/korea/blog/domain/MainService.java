@@ -28,6 +28,31 @@ public class MainService {
     }
   }
 
+//  public void deleteNoteBook(long bookId) {
+//    Notebook deleteTarget = notebookService.getOne(bookId);
+//    List<Notebook> subNotebookList = deleteTarget.getSubNotebookList();
+//
+//    for (Notebook subNotebook : subNotebookList) {
+//      List<Note> noteList = subNotebook.getNoteList();
+//      noteService.deleteAll(noteList);
+//      notebookService.delete(subNotebook);
+//    }
+//
+//    noteService.deleteAll(deleteTarget.getNoteList());
+//    notebookService.delete(deleteTarget);
+//  }
+
+  @Transactional
+  public Notebook saveSubNotebook(long parentId) {
+    Notebook subNotebook = notebookService.saveSubNotebook(parentId);
+    Note note = noteService.saveDefault();
+
+    // 서브 노트북의 기본 노트 생성
+    subNotebook.addNote(note);
+
+    return subNotebook;
+  }
+
   @Transactional
   public Notebook saveDefaultNotebook() {
     Notebook notebook = notebookService.saveDefault();

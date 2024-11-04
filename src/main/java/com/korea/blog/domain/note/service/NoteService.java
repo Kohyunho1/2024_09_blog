@@ -5,6 +5,7 @@ import com.korea.blog.domain.note.repository.NoteRepository;
 import com.korea.blog.domain.notebook.entity.Notebook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class NoteService {
     return noteRepository.findById(noteId).orElseThrow();
   }
 
+  @Transactional
   public Note modify(long noteId, String title, String content) {
 
     if(title.trim().length() == 0) {
@@ -46,6 +48,10 @@ public class NoteService {
 
   public void delete(long noteId) {
     noteRepository.deleteById(noteId);
+  }
+
+  public void deleteAll(List<Note> noteList) {
+    noteRepository.deleteAll(noteList);
   }
 }
 
