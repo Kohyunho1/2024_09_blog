@@ -61,20 +61,11 @@ public class NotebookService {
     notebookRepository.delete(subNotebook);
   }
 
-//  public void delete(long bookId) {
-//
-//    Notebook deleteTarget = getOne(bookId);
-//
-//    List<Notebook> subNotebookList = deleteTarget.getSubNotebookList();
-//
-//    for (Notebook subNotebook : subNotebookList) {
-//      notebookRepository.delete(subNotebook);
-//
-//      List<Note> noteList = subNotebook.getNoteList();
-//    }
-//
-//    deleteTarget.getNoteList(); // 자식
-//
-//    notebookRepository.deleteById(bookId);
-//  }
+  @Transactional
+  public Notebook modify(long bookId, String name) {
+    Notebook notebook = getOne(bookId);
+    notebook.setName(name);
+
+    return notebook;
+  }
 }

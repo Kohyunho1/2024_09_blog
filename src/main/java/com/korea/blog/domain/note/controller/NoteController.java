@@ -25,8 +25,6 @@ public class NoteController {
     return "main";
   }
 
-
-
   @PostMapping("/delete/{noteId}")
   public String delete(@PathVariable long noteId) {
     noteService.delete(noteId);
