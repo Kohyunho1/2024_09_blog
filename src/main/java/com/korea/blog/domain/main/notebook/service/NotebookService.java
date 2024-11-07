@@ -1,8 +1,7 @@
-package com.korea.blog.domain.notebook.service;
+package com.korea.blog.domain.main.notebook.service;
 
-import com.korea.blog.domain.note.entity.Note;
-import com.korea.blog.domain.notebook.entity.Notebook;
-import com.korea.blog.domain.notebook.repository.NotebookRepository;
+import com.korea.blog.domain.main.notebook.entity.Notebook;
+import com.korea.blog.domain.main.notebook.repository.NotebookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +66,9 @@ public class NotebookService {
     notebook.setName(name);
 
     return notebook;
+  }
+
+  public List<Notebook> getSearchedList(String keyword) {
+    return notebookRepository.findByNameContaining(keyword);
   }
 }

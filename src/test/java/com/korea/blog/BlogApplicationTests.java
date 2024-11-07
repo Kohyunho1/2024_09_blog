@@ -1,9 +1,9 @@
 package com.korea.blog;
 
-import com.korea.blog.domain.note.entity.Note;
-import com.korea.blog.domain.note.repository.NoteRepository;
-import com.korea.blog.domain.notebook.entity.Notebook;
-import com.korea.blog.domain.notebook.repository.NotebookRepository;
+import com.korea.blog.domain.main.note.entity.Note;
+import com.korea.blog.domain.main.note.repository.NoteRepository;
+import com.korea.blog.domain.main.notebook.entity.Notebook;
+import com.korea.blog.domain.main.notebook.repository.NotebookRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

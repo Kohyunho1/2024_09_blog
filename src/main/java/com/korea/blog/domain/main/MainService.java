@@ -1,10 +1,11 @@
-package com.korea.blog.domain;
+package com.korea.blog.domain.main;
 
-import com.korea.blog.domain.note.entity.Note;
-import com.korea.blog.domain.note.service.NoteService;
-import com.korea.blog.domain.notebook.entity.Notebook;
-import com.korea.blog.domain.notebook.service.NotebookService;
+import com.korea.blog.domain.main.note.entity.Note;
+import com.korea.blog.domain.main.note.service.NoteService;
+import com.korea.blog.domain.main.notebook.entity.Notebook;
+import com.korea.blog.domain.main.notebook.service.NotebookService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,5 +83,45 @@ public class MainService {
 
   public List<Notebook> getNoteBookList() {
     return notebookService.getList();
+  }
+
+  public List<Notebook> getSearchedNotebookList(String keyword) {
+    return notebookService.getSearchedList(keyword);
+  }
+
+  public List<Note> getSearchedNoteList(String keyword) {
+    return noteService.getSearchedList(keyword);
+  }
+
+  public MainDataDto getMainDataDto(long bookId, long noteId, String keyword) {
+    List<Notebook> notebookList = getNoteBookList();
+    Notebook selectedNotebook = notebookService.getOne(bookId);
+
+    List<Note> noteList = selectedNotebook.getNoteList();
+    Note selectedNote = noteService.getOne(noteId);
+
+    List<Notebook> searchedNotebookList = getSearchedNotebookList(keyword);
+    List<Note> searchedNoteList = getSearchedNoteList(keyword);
+
+    return MainDataDto.builder()
+        .notebookList(notebookList)
+        .selectedNotebook(selectedNotebook)
+        .noteList(noteList)
+        .selectedNote(selectedNote)
+        .searchedNotebookList(searchedNotebookList)
+        .searchedNoteList(searchedNoteList)
+        .build();
+  }
+
+  public MainDataDto getDefaultNoteMainDataDto(long bookId, String keyword) {
+    Notebook notebook = notebookService.getOne(bookId);
+    long noteId = notebook.getNoteList().getFirst().getId();
+    return getMainDataDto(bookId, noteId, keyword);
+  }
+
+  public MainDataDto getDefaultMainDataDto(String keyword) {
+    Notebook firstNotebook = notebookService.getList().getFirst();
+    getDefaultNoteMainDataDto(firstNotebook.getId(), keyword);
+    return getDefaultNoteMainDataDto(firstNotebook.getId(), keyword);
   }
 }

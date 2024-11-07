@@ -1,18 +1,14 @@
-package com.korea.blog.domain.notebook.controller;
+package com.korea.blog.domain.main.notebook.controller;
 
-import com.korea.blog.domain.MainService;
-import com.korea.blog.domain.note.entity.Note;
-import com.korea.blog.domain.note.service.NoteService;
-import com.korea.blog.domain.notebook.entity.Notebook;
-import com.korea.blog.domain.notebook.service.NotebookService;
+import com.korea.blog.domain.main.MainDataDto;
+import com.korea.blog.domain.main.MainService;
+import com.korea.blog.domain.main.note.entity.Note;
+import com.korea.blog.domain.main.notebook.entity.Notebook;
+import com.korea.blog.domain.main.notebook.service.NotebookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -59,33 +55,19 @@ public class NotebookController {
   }
 
   @GetMapping("/{bookId}/notes/{noteId}")
-  public String selectNote(@PathVariable long bookId, @PathVariable long noteId, Model model) {
+  public String selectNote(@PathVariable long bookId, @RequestParam(defaultValue = "") String keyword, @PathVariable long noteId, Model model) {
 
-    List<Notebook> notebookList = notebookService.getList();
-    Notebook selectedNoteBook = notebookService.getOne(bookId);
-    Note selectedNote = mainService.getNote(noteId);
-    List<Note> noteList = selectedNoteBook.getNoteList();
-
-    model.addAttribute("notebookList", notebookList);
-    model.addAttribute("noteList", noteList);
-    model.addAttribute("selectedNotebook", selectedNoteBook);
-    model.addAttribute("selectedNote", selectedNote);
+    MainDataDto mainDataDto = mainService.getMainDataDto(bookId, noteId, keyword);
+    model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";
   }
 
   @GetMapping("{bookId}")
-  public String select(@PathVariable long bookId, Model model) {
+  public String select(@PathVariable long bookId, @RequestParam(defaultValue = "") String keyword, Model model) {
 
-    List<Notebook> notebookList = notebookService.getList();
-    Notebook selectedNotebook = notebookService.getOne(bookId);
-    List<Note> noteList = selectedNotebook.getNoteList();
-    Note selectedNote = noteList.getFirst();
-
-    model.addAttribute("notebookList", notebookList);
-    model.addAttribute("noteList", noteList);
-    model.addAttribute("selectedNotebook", selectedNotebook);
-    model.addAttribute("selectedNote", selectedNote);
+    MainDataDto mainDataDto = mainService.getDefaultNoteMainDataDto(bookId, keyword);
+    model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";
   }

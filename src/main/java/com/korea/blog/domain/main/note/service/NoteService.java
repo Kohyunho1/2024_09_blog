@@ -1,14 +1,12 @@
-package com.korea.blog.domain.note.service;
+package com.korea.blog.domain.main.note.service;
 
-import com.korea.blog.domain.note.entity.Note;
-import com.korea.blog.domain.note.repository.NoteRepository;
-import com.korea.blog.domain.notebook.entity.Notebook;
+import com.korea.blog.domain.main.note.entity.Note;
+import com.korea.blog.domain.main.note.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +50,10 @@ public class NoteService {
 
   public void deleteAll(List<Note> noteList) {
     noteRepository.deleteAll(noteList);
+  }
+
+  public List<Note> getSearchedList(String keyword) {
+    return noteRepository.findByTitleContaining(keyword);
   }
 }
 

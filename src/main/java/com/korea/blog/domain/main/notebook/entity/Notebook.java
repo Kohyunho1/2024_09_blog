@@ -1,6 +1,6 @@
-package com.korea.blog.domain.notebook.entity;
+package com.korea.blog.domain.main.notebook.entity;
 
-import com.korea.blog.domain.note.entity.Note;
+import com.korea.blog.domain.main.note.entity.Note;
 import jakarta.persistence.*;
 import lombok.*;
 
