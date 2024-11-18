@@ -2,6 +2,7 @@ package com.korea.blog.domain.main;
 
 import com.korea.blog.domain.main.note.entity.Note;
 import com.korea.blog.domain.main.notebook.entity.Notebook;
+import com.korea.blog.global.dto.ParamDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,9 +25,9 @@ public class MainController {
 
   // 초기 화면 -> 첫번째 노트북의 첫번째 노트가 선택되도록 약속
   @GetMapping("/")
-  public String main(Model model, @RequestParam(defaultValue = "") String keyword) {
+  public String main(Model model, ParamDto paramDto) {
 
-    MainDataDto mainDataDto = mainService.getDefaultMainDataDto(keyword);
+    MainDataDto mainDataDto = mainService.getDefaultMainDataDto(paramDto.getKeyword());
     model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";
