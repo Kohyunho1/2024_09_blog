@@ -58,7 +58,7 @@ public class NotebookController {
   @GetMapping("/{bookId}/notes/{noteId}")
   public String selectNote(@PathVariable long bookId, ParamDto paramDto, @PathVariable long noteId, Model model) {
 
-    MainDataDto mainDataDto = mainService.getMainDataDto(bookId, noteId, paramDto.getKeyword());
+    MainDataDto mainDataDto = mainService.getMainDataDto(bookId, noteId, paramDto.getKeyword(), paramDto.getSortTarget());
     model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";
@@ -67,7 +67,7 @@ public class NotebookController {
   @GetMapping("{bookId}")
   public String select(@PathVariable long bookId, ParamDto paramDto, Model model) {
 
-    MainDataDto mainDataDto = mainService.getDefaultNoteMainDataDto(bookId, paramDto.getKeyword());
+    MainDataDto mainDataDto = mainService.getDefaultNoteMainDataDto(bookId, paramDto.getKeyword(), paramDto.getSortTarget());
     model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";

@@ -22,6 +22,7 @@ public class Notebook {
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
   @Builder.Default
+  @OrderBy("id desc")
   private List<Note> noteList = new ArrayList<>();
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)

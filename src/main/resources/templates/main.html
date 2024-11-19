@@ -8,7 +8,8 @@
     searchedNotebookList = ${mainDataDto.searchedNotebookList},
     searchedNoteList = ${mainDataDto.searchedNoteList},
     keyword = ${paramDto.keyword},
-    isModalOpen = ${paramDto.isModalOpen}
+    isModalOpen = ${paramDto.isModalOpen},
+    sortTarget = ${paramDto.sortTarget}
 ">
     <dialog id="my_modal_1" class="modal">
         <div class="modal-box">
@@ -28,18 +29,21 @@
         <div class="modal-box h-[50vh] flex flex-col gap-4">
             <form class="flex justify-center gap-4" action="/">
                 <input type="text" class="input input-bordered" name="keyword" th:value="${keyword}">
-                <input type="hidden" name="isModalOpen" th:value="true" />
+                <input type="hidden" name="isModalOpen" th:value="true"/>
+                <input type="hidden" name="sortTarget" th:value="${sortTarget}"/>
                 <input type="submit" class="btn btn-success" value="검색">
             </form>
             <div class="border h-[80%] overflow-auto">
                 <ul>
                     <li th:each="notebook : ${searchedNotebookList}">
                         <i class="fa-solid fa-book"></i>
-                        <a th:href="@{|/books/${notebook.id}?keyword=${keyword}&isModalOpen=false|}" th:text="${notebook.name}"></a>
+                        <a th:href="${@paramDto.getParamUrl('/books/' + notebook.id)}"
+                           th:text="${notebook.name}"></a>
                     </li>
                     <li th:each="note : ${searchedNoteList}">
                         <i class="fa-solid fa-file-lines"></i>
-                        <a th:href="@{|/books/${note.parent.id}/notes/${note.id}?keyword=${keyword}&isModalOpen=false|}" th:text="${note.title}"></a>
+                        <a th:href="${@paramDto.getParamUrl('/books/' + note.parent.id + '/notes/' + note.id)}"
+                           th:text="${note.title}"></a>
                     </li>
                 </ul>
             </div>
@@ -49,12 +53,18 @@
         </div>
     </dialog>
     <div class="content flex h-[90vh]">
+        <div>
+            <input type="hidden" id="keyword" th:value="${keyword}"/>
+            <input type="hidden" id="isModalOpen" th:value="${isModalOpen}"/>
+            <input type="hidden" id="sortTarget" th:value="${sortTarget}"/>
+        </div>
         <div class="left-book border border-black h-[100%] w-[15%] p-2 ">
             <ul class="menu bg-base-200 rounded-box w-[100%]">
                 <li th:each="notebook : ${notebookList}">
                     <th:block th:if="${#lists.size(notebook.subNotebookList) == 0 && notebook.parent == null}">
                         <a class="block p-2" th:classappend="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
-                           th:href="@{|/books/${notebook.id}?keyword=${keyword}&isModalOpen=false|}" th:text="${notebook.name}"></a>
+                           th:href="${@paramDto.getParamUrl('/books/' + notebook.id)}"
+                           th:text="${notebook.name}"></a>
                     </th:block>
                     <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
                         <details open>
@@ -64,7 +74,8 @@
                             <ul>
                                 <li th:each="subNotebook : ${notebook.subNotebookList}">
                                     <a th:classappend="${subNotebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
-                                       th:href="@{|/books/${subNotebook.id}|}" th:text="${subNotebook.name}"></a>
+                                       th:href="${@paramDto.getParamUrl('/books/' + subNotebook.id)}"
+                                       th:text="${subNotebook.name}"></a>
                                 </li>
                             </ul>
                         </details>
@@ -86,20 +97,25 @@
                 <input type="submit" class="btn btn-error" value="노트북 삭제"/>
             </form>
             <button class="btn" onclick="my_modal_1.showModal()">노트북 이름 변경</button>
-            <input type="hidden" id="isModalOpen" th:value="${isModalOpen}" />
             <button class="btn" onclick="my_modal_2.showModal()">검색</button>
-
         </div>
         <div class="left-note border border-black h-[100%] w-[15%] p-2 ">
             <ul class="h-[90%] overflow-auto">
                 <li th:class="${note.id == selectedNote.id} ? 'bg-blue-500' : ''" th:each="note : ${noteList}">
-                    <a class="block p-2" th:href="@{|/books/${selectedNotebook.id}/notes/${note.id}?keyword=${keyword}&isModalOpen=false|}"
+                    <a class="block p-2"
+                       th:href="${@paramDto.getParamUrl('/books/' + selectedNotebook.id + '/notes/' + note.id)}"
                        th:text="${note.title}"></a>
                 </li>
             </ul>
-            <form th:action="@{|/books/${selectedNotebook.id}/notes/write|}" method="post">
-                <input type="submit" class="btn btn-info" value="추가"/>
-            </form>
+            <div class="flex gap-3">
+                <form th:action="@{|/books/${selectedNotebook.id}/notes/write|}" method="post">
+                    <input type="submit" class="btn btn-info" value="추가"/>
+                </form>
+                <a th:href="@{|/books/${selectedNotebook.id}/notes/${selectedNote.id}?keyword=${keyword}&isModalOpen=${isModalOpen}&sortTarget=id|}"
+                   class="btn">날짜순</a>
+                <a th:href="@{|/books/${selectedNotebook.id}/notes/${selectedNote.id}?keyword=${keyword}&isModalOpen=${isModalOpen}&sortTarget=title|}"
+                   class="btn">이름순</a>
+            </div>
         </div>
         <div class="right border border-black h-[100%] w-[70%] p-2">
             <div class="flex flex-col gap-2">
@@ -119,16 +135,36 @@
             </div>
         </div>
     </div>
-    <script>
+<!--    <script>-->
 
-        const isModalOpen = document.querySelector("#isModalOpen");
-        const isModalOpenVal = isModalOpen.value;
+<!--        const isModalOpen = document.querySelector("#isModalOpen");-->
+<!--        const isModalOpenVal = isModalOpen.value;-->
 
-        if(isModalOpenVal === "true") {
-            my_modal_2.showModal();
-        }
+<!--        if(isModalOpenVal === "true") {-->
+<!--            my_modal_2.showModal();-->
+<!--        }-->
 
-    </script>
+<!--        const keyword = document.querySelector("#keyword");-->
+<!--        const isModalOpen2 = document.querySelector("#isModalOpen");-->
+<!--        const sortTarget = document.querySelector("#sortTarget");-->
+
+<!--        const params = new URLSearchParams({-->
+<!--            keyword: keyword.value,-->
+<!--            isModalOpen2: isModalOpen2.value,-->
+<!--            sortTarget: sortTarget.value,-->
+<!--        });-->
+
+<!--        const url = "/" + params.toString();-->
+
+<!--        return params;-->
+
+<!--        const books = document.querySelectorAll(".bookAnchor");-->
+
+<!--        function getAction(url) {-->
+<!--            const paramUrl = default-->
+<!--        }-->
+
+<!--    </script>-->
     <script th:inline="javascript">
         const Editor = toastui.Editor;
 

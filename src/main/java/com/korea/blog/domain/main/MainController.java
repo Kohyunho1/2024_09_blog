@@ -27,7 +27,7 @@ public class MainController {
   @GetMapping("/")
   public String main(Model model, ParamDto paramDto) {
 
-    MainDataDto mainDataDto = mainService.getDefaultMainDataDto(paramDto.getKeyword());
+    MainDataDto mainDataDto = mainService.getDefaultMainDataDto(paramDto.getKeyword(), paramDto.getSortTarget());
     model.addAttribute("mainDataDto", mainDataDto);
 
     return "main";
