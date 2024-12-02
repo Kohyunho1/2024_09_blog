@@ -27,4 +27,8 @@ public class MemberService {
 
     memberRepository.save(member);
   }
+
+  public boolean isExist(String username) {
+    return memberRepository.findByUsername(username).isPresent();
+  }
 }

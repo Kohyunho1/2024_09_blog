@@ -3,6 +3,7 @@ package com.korea.blog.domain.member.controller;
 import com.korea.blog.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,5 +50,19 @@ public class MemberController {
 
     memberService.join(joinForm.getUsername(), joinForm.getPassword());
     return "redirect:/members/login";
+  }
+
+  @Getter
+  @Setter
+  @AllArgsConstructor
+  public static class DuplicationCheckDto {
+    private boolean result;
+  }
+
+  @GetMapping("/dupChk")
+  @ResponseBody
+  public DuplicationCheckDto duplicationCheck(String username) {
+    boolean result = memberService.isExist(username);
+    return new DuplicationCheckDto(result);
   }
 }

@@ -28,14 +28,18 @@
     </dialog>
     <dialog id="my_modal_2" class="modal">
         <div class="modal-box h-[50vh] flex flex-col gap-4">
-            <form class="flex justify-center gap-4" action="/">
-                <input type="text" class="input input-bordered" name="keyword" th:value="${keyword}">
-                <input type="hidden" name="isModalOpen" th:value="true"/>
-                <input type="hidden" name="sortTarget" th:value="${sortTarget}"/>
-                <input type="submit" class="btn btn-success" value="검색">
-            </form>
+<!--            <form class="flex justify-center gap-4" action="/">-->
+<!--                <input type="text" class="input input-bordered" name="keyword" th:value="${keyword}">-->
+<!--                <input type="hidden" name="isModalOpen" th:value="true"/>-->
+<!--                <input type="hidden" name="sortTarget" th:value="${sortTarget}"/>-->
+<!--                <input type="submit" class="btn btn-success" value="검색">-->
+<!--            </form>-->
+
+            <input class="input input-bordered" id="inputKeyword" type="text">
+            <button class="btn btn-success" onclick="search();">검색</button>
+
             <div class="border h-[80%] overflow-auto">
-                <ul>
+                <ul id="searchResult">
                     <li th:each="notebook : ${searchedNotebookList}">
                         <i class="fa-solid fa-book"></i>
                         <a th:href="${@urlParamManager.getBookUrl(notebook.id)}"
@@ -139,12 +143,37 @@
     </div>
     <script>
 
-        const isModalOpen = document.querySelector("#isModalOpen");
-        const isModalOpenVal = isModalOpen.value;
+        function search() {
+            const searchResult = document.querySelector("#searchResult");
+            const keyword = document.querySelector("#inputKeyword");
 
-        if(isModalOpenVal === "true") {
-            my_modal_2.showModal();
+            // 서버에게 검색 결과 요청하기
+            fetch('http://localhost:8088/api/search?keyword='+keyword.value)
+            .then((res) => res.json())
+            .then((data) => {
+                let html = "";
+                data.searchedNotebookList.forEach((book) => {
+                    html += "<li>" + book.name + "</li>";
+                });
+
+                data.searchedNoteList.forEach((note) => {
+                    html += "<li>" + note.title + "</li>";
+                });
+
+                searchResult.innerHTML = html;
+            });
         }
+
+    </script>
+    <script>
+
+        // const isModalOpen = document.querySelector("#isModalOpen");
+        // const isModalOpenVal = isModalOpen.value;
+
+        // if(isModalOpenVal === "true") {
+        //     my_modal_2.showModal();
+        // }
+
     </script>
     <script th:inline="javascript">
         const Editor = toastui.Editor;

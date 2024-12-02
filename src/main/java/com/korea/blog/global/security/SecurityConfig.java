@@ -19,8 +19,8 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/members/join", "/members/login").permitAll()
-            .anyRequest().authenticated() //authenticated() 인증된 요청만 들여 보내기. permitAll() 모든 요청 들여 보내기
+            .requestMatchers("/members/join", "/members/login", "/members/dupChk").permitAll()
+            .anyRequest().authenticated() // authenticated() 인증된 요청만 들여 보내기. permitAll() 모든 요청 들여 보내기
         )
         .formLogin(form -> form
             .loginPage("/members/login")
